@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Play Pokémon Emerald</title>
+</head>
+<body>
+
+    <!-- This is where the game window will load -->
+    <div style="width:640px; height:480px; max-width:100%;" id="game"></div>
+
+    <script type="text/javascript">
+        // 1. Define where the emulator software components are stored on your server
+        EJS_pathtodata = '/emulator/data/'; 
+        
+        // 2. Define the Console Type ('gba', 'nds', or 'n64')
+        EJS_core = 'gba'; 
+        
+        // 3. Paste the external URL where the ROM is sitting on the internet
+        EJS_gameUrl = 'https://external-storage-site.com'; 
+
+        // 4. Point to the HTML element container ID
+        EJS_player = '#game'; 
+    </script>
+
+    <!-- Load the main EmulatorJS engine script -->
+    <script src="/emulator/data/loader.js"></script>
+
+</body>
+</html>
 
