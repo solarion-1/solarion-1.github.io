@@ -24,21 +24,21 @@
     <div id="game"></div>
 
     <script type="text/javascript">
-        // 1. Detect which game button was clicked on the menu
+        // 1. Detect which game button was clicked on your homepage menu
         const urlParams = new URLSearchParams(window.location.search);
         const gameName = urlParams.get('game') || 'emerald';
         const gameCore = urlParams.get('core') || 'gba';
 
-        // 2. These are the real, active working game links
+        // 2. UNBLOCKED LINKS (Hosted on GitHub's school-safe raw network)
         const romLinks = {
-            'emerald': 'https://archive.org',
-            'black': 'https://archive.org',
-            'kirby': 'https://archive.org',
-            'starfox64': 'https://archive.org',
-            'smash64': 'https://archive.org',
-            'nsmb': 'https://archive.org',
-            'marioadvance2': 'https://archive.org',
-            'marioland': 'https://archive.org'
+            'emerald': 'https://githubusercontent.com',
+            'black': 'https://githubusercontent.com',
+            'kirby': 'https://githubusercontent.com',
+            'starfox64': 'https://githubusercontent.com',
+            'smash64': 'https://githubusercontent.com',
+            'nsmb': 'https://githubusercontent.com',
+            'marioadvance2': 'https://githubusercontent.com',
+            'marioland': 'https://githubusercontent.com'
         };
 
         // 3. Fire up the EmulatorJS engine
@@ -52,3 +52,4 @@
 
 </body>
 </html>
+
