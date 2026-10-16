@@ -1,14 +1,54 @@
-        // Complete unblocked URL configuration map for Solarion Gaming
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solarion Console Engine</title>
+    <style>
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            background-color: #000000; 
+        }
+        #game { 
+            width: 100%; 
+            height: 100vh; 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game"></div>
+
+    <script type="text/javascript">
+        // 1. Detect which game button was clicked on the menu
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameName = urlParams.get('game') || 'emerald';
+        const gameCore = urlParams.get('core') || 'gba';
+
+        // 2. These are the real, active working game links
         const romLinks = {
-            /* Your First 5 Classics */
             'emerald': 'https://archive.org',
             'black': 'https://archive.org',
             'kirby': 'https://archive.org',
             'starfox64': 'https://archive.org',
             'smash64': 'https://archive.org',
-
-            /* Your 3 New Mario Platform Additions */
             'nsmb': 'https://archive.org',
             'marioadvance2': 'https://archive.org',
             'marioland': 'https://archive.org'
         };
+
+        // 3. Fire up the EmulatorJS engine
+        EJS_pathtodata = 'https://jsdelivr.net'; 
+        EJS_core = gameCore; 
+        EJS_gameUrl = romLinks[gameName]; 
+        EJS_player = '#game'; 
+    </script>
+    
+    <script src="https://jsdelivr.netloader.js"></script>
+
+</body>
+</html>
