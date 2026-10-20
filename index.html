@@ -6,7 +6,12 @@
     <title>Solarion Offline Arcade</title>
     <style>
         body { background: #121212; color: #fff; font-family: system-ui, sans-serif; text-align: center; margin: 0; padding: 20px; }
-        h1 { color: #ffcc00; text-shadow: 2px 2px #000; margin-bottom: 5px; }
+        
+        /* Styled Brand Header Container */
+        .brand-header { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .site-logo { max-width: 150px; height: auto; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h1 { color: #ffcc00; text-shadow: 2px 2px #000; margin: 0; }
+        
         .sub { color: #aaa; font-size: 13px; margin-bottom: 20px; }
         .box { max-width: 600px; margin: 15px auto; padding: 15px; border-radius: 8px; text-align: left; }
         .stealth-box { background: #112233; border: 2px solid #00ffcc; }
@@ -21,7 +26,11 @@
 </head>
 <body>
 
-    <h1>🎮 Solarion Arcade (Offline Edition) 🕹️</h1>
+    <!-- Header Section Utilizing Your Stored Logo -->
+    <div class="brand-header">
+        <img src="Designer.png" alt="Solarion Logo" class="site-logo">
+        <h1>Solarion Arcade (Offline Edition)</h1>
+    </div>
     <p class="sub">Fully functional on Chromebooks and Windows with internet completely disabled.</p>
 
     <!-- STEP 1: Cloaked Tab Spawner -->
@@ -51,7 +60,6 @@
     </div>
 
     <script>
-        // Spawns the entire web document content into an isolated about:blank container
         function spawnCloakedOffline() {
             const currentHTML = document.documentElement.outerHTML;
             const targetTab = window.open('about:blank', '_blank');
@@ -64,7 +72,6 @@
             targetTab.document.close();
         }
 
-        // Standard execution block using local binary file references
         function bootOfflineGame() {
             const fileInput = document.getElementById('rom-file');
             const coreSelect = document.getElementById('core-select');
@@ -74,20 +81,21 @@
                 return;
             }
 
-            // Generate an isolated file stream out of local workspace
-            const fileBlob = URL.createObjectURL(fileInput.files[0]);
-
+            const fileBlob = URL.createObjectURL(fileInput.files);
             document.getElementById('game-container').innerHTML = '<div id="emulator"></div>';
 
             EJS_player = '#emulator';
             EJS_gameUrl = fileBlob;
             EJS_core = coreSelect.value;
             
-            // CRUCIAL: Points the script engine straight to your local data folder path instead of online servers
+            // Customizes EmulatorJS splash screens with your logo asset path
+            EJS_backgroundImage = 'Designer.png'; 
+            EJS_backgroundBlur = true; // Blurs background art cleanly behind buttons
+
             EJS_pathtodata = 'data/'; 
 
             const loader = document.createElement('script');
-            loader.src = 'data/loader.js'; // Loads your local loader asset file
+            loader.src = 'data/loader.js';
             document.body.appendChild(loader);
         }
     </script>
