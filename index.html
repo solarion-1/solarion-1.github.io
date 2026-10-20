@@ -3,53 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Workspace Project</title>
+    <title>Solarion Retro Arcade</title>
     <style>
-        body { font-family: sans-serif; background: #222; color: #fff; text-align: center; padding: 20px; }
-        select { padding: 10px; font-size: 16px; margin-bottom: 20px; border-radius: 5px; }
-        #emulator-container { width: 800px; height: 600px; max-width: 100%; margin: 0 auto; background: #000; }
+        body { background: #151515; color: #fff; font-family: system-ui, sans-serif; text-align: center; margin: 0; padding: 20px; }
+        h1 { margin-bottom: 5px; color: #ffcc00; text-shadow: 2px 2px #000; }
+        .menu-container { margin: 20px auto; }
+        select { padding: 10px 20px; font-size: 16px; background: #333; color: #fff; border: 2px solid #ffcc00; border-radius: 5px; cursor: pointer; }
+        #game-container { width: 640px; height: 480px; max-width: 100%; margin: 20px auto; background: #000; border: 4px solid #333; box-shadow: 0px 10px 20px rgba(0,0,0,0.5); }
+        #emulator { width: 100%; height: 100%; }
     </style>
 </head>
 <body>
 
-    <h1>Select a File Routine</h1>
-    
-    <!-- Linewise won't easily flag a dropdown calling text files -->
-    <select id="gameSelect" onchange="loadGame()">
-        <option value="">-- Choose a Game --</option>
-        <option value="assets/poke-em.txt" data-core="gba">Pokémon Emerald (GBA)</option>
-        <option value="assets/mario-adv.txt" data-core="gba">Super Mario Advance (GBA)</option>
-        <option value="assets/mario-land.txt" data-core="gb">Super Mario Land (GB)</option>
-        <option value="assets/poke-blk.txt" data-core="nds">Pokémon Black (NDS)</option>
-        <option value="assets/kirby-ultra.txt" data-core="nds">Kirby Super Star Ultra (NDS)</option>
-        <option value="assets/nsmb.txt" data-core="nds">New Super Mario Bros. (NDS)</option>
-        <option value="assets/sfox64.txt" data-core="n64">Star Fox 64 (N64)</option>
-        <option value="assets/smash64.txt" data-core="n64">Super Smash Bros (N64)</option>
-    </select>
+    <h1>🎮 Solarion Arcade 🕹️</h1>
+    <p>Select a game to boot the emulator directly in your browser.</p>
 
-    <div id="emulator-container">
-        <div id="game"></div>
+    <div class="menu-container">
+        <!-- Game Dropdown Selection Menu -->
+        <select id="game-selector" onchange="loadSelectedGame()">
+            <option value="" disabled selected>--- Choose a Game ---</option>
+            <!-- Game Boy -->
+            <option value="roms/super_mario_land.gb" data-core="gb">Super Mario Land (GB)</option>
+            <!-- Game Boy Advance -->
+            <option value="roms/pokemon_emerald.gba" data-core="gba">Pokémon Emerald (GBA)</option>
+            <option value="roms/super_mario_advance1.gba" data-core="gba">Super Mario Advance 1 (GBA)</option>
+            <!-- Nintendo 64 -->
+            <option value="roms/star_fox_64.z64" data-core="n64">Star Fox 64 (N64)</option>
+            <option value="roms/super_smash_bros_64.z64" data-core="n64">Super Smash Bros 64 (N64)</option>
+            <!-- Nintendo DS -->
+            <option value="roms/pokemon_black.nds" data-core="nds">Pokémon Black (NDS)</option>
+            <option value="roms/kirby_super_star_ultra.nds" data-core="nds">Kirby Super Star Ultra (NDS)</option>
+            <option value="roms/new_super_mario_bros.nds" data-core="nds">New Super Mario Bros. (NDS)</option>
+        </select>
+    </div>
+
+    <div id="game-container">
+        <div id="emulator"></div>
     </div>
 
     <script>
-        function loadGame() {
-            const picker = document.getElementById("gameSelect");
-            const selectedOption = picker.options[picker.selectedIndex];
+        function loadSelectedGame() {
+            const selector = document.getElementById('game-selector');
+            const selectedOption = selector.options[selector.selectedIndex];
             
-            if (!selectedOption.value) return;
+            const fileUrl = selectedOption.value;
+            const coreType = selectedOption.getAttribute('data-core');
 
-            // Completely clear out old emulator window instance before rebooting
-            document.getElementById("emulator-container").innerHTML = '<div id="game"></div>';
+            if (!fileUrl) return;
 
-            // Configure EmulatorJS parameters locally
-            EJS_player = '#game';
-            EJS_gameUrl = selectedOption.value; 
-            EJS_core = selectedOption.getAttribute("data-core");
-            EJS_pathtodata = 'data/'; // Points directly to your uploaded folder
+            // Clear previous emulator instance safely
+            document.getElementById('game-container').innerHTML = '<div id="emulator"></div>';
 
-            // Dynamically load the core initialization script
+            // Configure EmulatorJS parameters dynamically
+            EJS_player = '#emulator';
+            EJS_gameUrl = fileUrl;
+            EJS_core = coreType;
+            EJS_pathtodata = 'https://jsdelivr.net';
+            
+            // Inject loader script to boot the fresh core
             const loader = document.createElement('script');
-            loader.src = 'data/loader.js';
+            loader.src = 'https://jsdelivr.netloader.js';
             document.body.appendChild(loader);
         }
     </script>
