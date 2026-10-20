@@ -3,89 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solarion Offline Arcade</title>
+    <title>Solarion Portal</title>
     <style>
         body { background: #121212; color: #fff; font-family: system-ui, sans-serif; text-align: center; margin: 0; padding: 20px; }
         .brand-header { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; }
         .site-logo { max-width: 150px; height: auto; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         h1 { color: #ffcc00; text-shadow: 2px 2px #000; margin: 0; }
         .sub { color: #aaa; font-size: 13px; margin-bottom: 25px; }
+        #password-screen { max-width: 400px; margin: 100px auto; padding: 30px; background: #1c1c1c; border: 2px solid #333; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .pass-input { width: 80%; padding: 12px; background: #222; border: 1px solid #555; border-radius: 4px; color: #fff; font-size: 16px; text-align: center; margin-bottom: 15px; }
+        .pass-btn { padding: 10px 25px; background: #ffcc00; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        #arcade-content { display: none; }
         .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; max-width: 900px; margin: 0 auto; }
-        .game-card { background: #1c1c1c; border: 2px solid #333; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: 0.2s; }
-        .game-card:hover { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.1); }
-        .game-title { font-weight: bold; margin-bottom: 10px; color: #fff; }
-        .play-btn { width: 100%; padding: 10px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
-        .play-btn:hover { background: #00cc99; }
+        .game-card { background: #1c1c1c; border: 2px solid #333; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+        .play-btn { width: 100%; padding: 10px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <div class="brand-header">
-        <img src="Designer.png" alt="Solarion Logo" class="site-logo" onerror="this.style.display='none'">
+    <div id="password-screen">
+        <h2>Security Portal</h2>
+        <input type="password" id="password-field" class="pass-input" placeholder="Enter Access Pin/Key">
+        <br>
+        <button class="pass-btn" onclick="checkGatePassword()">Verify Access</button>
+    </div>
+    <div id="arcade-content">
         <h1>Solarion Arcade Cloud Vault</h1>
-    </div>
-    <p class="sub">Select a game to inject it straight into an unblockable about:blank tab. No local drive storage used.</p>
-
-    <!-- Unified Game Repository Matrix Menu -->
-    <div class="grid-container">
-        <div class="game-card">
-            <div class="game-title">Super Mario Land (GB)</div>
-            <button class="play-btn" onclick="launchStealthGame('vault/super_mario_land.html')">Launch Game</button>
-        </div>
-        <div class="game-card">
-            <div class="game-title">Pokémon Emerald (GBA)</div>
-            <button class="play-btn" onclick="launchStealthGame('vault/pokemon_emerald.html')">Launch Game</button>
-        </div>
-        <div class="game-card">
-            <div class="game-title">Super Mario Advance 1 (GBA)</div>
-            <button class="play-btn" onclick="launchStealthGame('vault/super_mario_advance1.html')">Launch Game</button>
-        </div>
-        <div class="game-card">
-            <div class="game-title">Star Fox 64 (N64)</div>
-            <button class="play-btn" onclick="launchStealthGame('vault/star_fox_64.html')">Launch Game</button>
-        </div>
-        <div class="game-card">
-            <div class="game-title">Super Smash Bros 64 (N64)</div>
-            <button class="play-btn" onclick="launchStealthGame('vault/super_smash_bros_64.html')">Launch Game</button>
-        </div>
-        <div class="game-card">
-            <div class="game-title">Pokémon Black (NDS)</div>
-            <button class="play-btn" onclick="launchStealthGame('vault/pokemon_black.html')">Launch Game</button>
-        </div>
-        <div class="game-card">
-            <div class="game-title">Kirby Super Star Ultra (NDS)</div>
-            <button class="play-btn" onclick="launchStealthGame('vault/kirby_super_star_ultra.html')">Launch Game</button>
-        </div>
-        <div class="game-card">
-            <div class="game-title">New Super Mario Bros. (NDS)</div>
-            <button class="play-btn" onclick="launchStealthGame('vault/new_super_mario_bros.html')">Launch Game</button>
+        <div class="grid-container">
+            <div class="game-card">
+                <div class="game-title">Super Mario Land (GB)</div>
+                <button class="play-btn" onclick="launchStealthGame('vault/super_mario_land.html')">Launch Game</button>
+            </div>
         </div>
     </div>
-
     <script>
-        // FIXED CLOAK ENGINE: Streams website-hosted HTML games directly into about:blank viewport space
-        function launchStealthGame(targetGameUrl) {
-            // Spawns the clean canvas tab instance window
-            const stealthTab = window.open('about:blank', '_blank');
-            if (!stealthTab) {
-                alert("Pop-up blocked! Please allow popups for this site in your address bar.");
-                return;
+        const TARGET_HASH_KEY = "3b08e2f80879ee05988e0eb50085871f3014a66a1c1da91b297ee73b4df9dbe9";
+        async function calculateSHA256(plaintext) {
+            const data = new TextEncoder().encode(plaintext);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        async function checkGatePassword() {
+            const userInput = document.getElementById('password-field').value;
+            if (await calculateSHA256(userInput) === TARGET_HASH_KEY) {
+                document.getElementById('password-screen').style.display = 'none';
+                document.getElementById('arcade-content').style.display = 'block';
+            } else {
+                alert("Access Denied");
             }
-
-            // Instructs the new blank window context to open an unblockable full-screen viewport iframe pointing to your hosted file path
-            stealthTab.document.open();
-            stealthTab.document.write(`
-                <html>
-                <head>
-                    <title>about:blank</title>
-                    <style>body,html{margin:0;padding:0;overflow:hidden;background:#000;}</style>
-                </head>
-                <body>
-                    <iframe src="${window.location.origin}/${window.location.pathname.split('/')[1]}/${targetGameUrl}" style="width:100vw;height:100vh;border:none;margin:0;padding:0;position:fixed;top:0;left:0;"></iframe>
-                </body>
-                </html>
-            `);
-            stealthTab.document.close();
+        }
+        function launchStealthGame(url) {
+            const tab = window.open('about:blank', '_blank');
+            tab.document.write(`<iframe src="${url}" style="width:100vw;height:100vw;border:none;position:fixed;top:0;left:0;"></iframe>`);
         }
     </script>
 </body>
