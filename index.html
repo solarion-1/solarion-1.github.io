@@ -3,51 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solarion Retro Arcade</title>
+    <title>Solarion Offline Arcade</title>
     <style>
-        body { background: #151515; color: #fff; font-family: system-ui, sans-serif; text-align: center; margin: 0; padding: 20px; }
-        h1 { color: #ffcc00; text-shadow: 2px 2px #000; }
-        .menu-container { margin: 20px auto; }
-        select { padding: 12px 20px; font-size: 16px; background: #333; color: #fff; border: 2px solid #ffcc00; border-radius: 5px; cursor: pointer; }
+        body { background: #121212; color: #fff; font-family: system-ui, sans-serif; text-align: center; margin: 0; padding: 20px; }
+        h1 { color: #ffcc00; text-shadow: 2px 2px #000; margin-bottom: 5px; }
+        .sub { color: #aaa; font-size: 13px; margin-bottom: 20px; }
+        .box { max-width: 600px; margin: 15px auto; padding: 15px; border-radius: 8px; text-align: left; }
+        .stealth-box { background: #112233; border: 2px solid #00ffcc; }
+        .offline-box { background: #221111; border: 2px dashed #ff4444; }
+        .btn { padding: 10px 20px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        .btn-cyan { background: #00ffcc; color: #000; }
+        .btn-red { background: #ff4444; color: #fff; }
         #game-container { width: 640px; height: 480px; max-width: 100%; margin: 20px auto; background: #000; border: 4px solid #333; }
         #emulator { width: 100%; height: 100%; }
-        .vault-section { max-width: 500px; margin: 40px auto; padding: 20px; background: #1c1c1c; border: 1px dashed #444; border-radius: 8px; text-align: left; }
+        select, input[type="file"] { padding: 8px; background: #222; color: #fff; border: 1px solid #555; border-radius: 4px; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <h1>🎮 Solarion Arcade 🕹️</h1>
-    <p>Play online or download setups for local offline use.</p>
 
-    <div class="menu-container">
-        <select id="game-selector" onchange="loadSelectedGame()">
-            <option value="" disabled selected>--- Choose a Game to Play Online ---</option>
-            <option value="roms/super_mario_land.gb" data-core="gb">Super Mario Land (GB)</option>
-            <option value="roms/pokemon_emerald.gba" data-core="gba">Pokémon Emerald (GBA)</option>
-            <option value="roms/star_fox_64.z64" data-core="n64">Star Fox 64 (N64)</option>
-            <option value="roms/pokemon_black.nds" data-core="nds">Pokémon Black (NDS)</option>
-        </select>
+    <h1>🎮 Solarion Arcade (Offline Edition) 🕹️</h1>
+    <p class="sub">Fully functional on Chromebooks and Windows with internet completely disabled.</p>
+
+    <!-- STEP 1: Cloaked Tab Spawner -->
+    <div class="box stealth-box">
+        <strong>🔒 Step 1: Open Cloaked Window</strong>
+        <p style="font-size:12px; margin:5px 0; color:#88aabb;">Injects the code architecture directly into an about:blank canvas so background trackers see an empty browser instance.</p>
+        <button class="btn btn-cyan" onclick="spawnCloakedOffline()">Launch about:blank Arcade</button>
     </div>
 
-    <div id="game-container"><div id="emulator"></div></div>
+    <!-- STEP 2: Injection Mechanism for Raw Local Files -->
+    <div class="box offline-box">
+        <strong>📁 Step 2: Inject Local Game File</strong>
+        <p style="font-size:12px; margin:5px 0; color:#ccaabb;">Select a game file saved anywhere on your computer or USB, choose the system, and boot.</p>
+        <input type="file" id="rom-file" accept=".gb,.gba,.z64,.n64,.nds">
+        <br>
+        <select id="core-select">
+            <option value="gb">Game Boy (GB)</option>
+            <option value="gba">Game Boy Advance (GBA)</option>
+            <option value="n64">Nintendo 64 (N64)</option>
+            <option value="nds">Nintendo DS (NDS)</option>
+        </select>
+        <button class="btn btn-red" onclick="bootOfflineGame()">Boot Game Engine</button>
+    </div>
 
-    <div class="vault-section">
-        <h3>💾 Solarion's Offline Vault</h3>
-        <ul>
-            <li><a href="vault/super_mario_land.html" target="_blank" download>Super Mario Land (GB)</a></li>
-            <li><a href="vault/pokemon_emerald.html" target="_blank" download>Pokémon Emerald (GBA)</a></li>
-        </ul>
+    <div id="game-container">
+        <div id="emulator"></div>
     </div>
 
     <script>
-        function loadSelectedGame() {
-            const selector = document.getElementById('game-selector');
-            const opt = selector.options[selector.selectedIndex];
-            if (!opt.value) return;
+        // Spawns the entire web document content into an isolated about:blank container
+        function spawnCloakedOffline() {
+            const currentHTML = document.documentElement.outerHTML;
+            const targetTab = window.open('about:blank', '_blank');
+            if (!targetTab) {
+                alert("Pop-up blocked! Please click the icon in your address bar and allow popups.");
+                return;
+            }
+            targetTab.document.open();
+            targetTab.document.write(currentHTML);
+            targetTab.document.close();
+        }
+
+        // Standard execution block using local binary file references
+        function bootOfflineGame() {
+            const fileInput = document.getElementById('rom-file');
+            const coreSelect = document.getElementById('core-select');
+            
+            if (fileInput.files.length === 0) {
+                alert("Please pick a game file first!");
+                return;
+            }
+
+            // Generate an isolated file stream out of local workspace
+            const fileBlob = URL.createObjectURL(fileInput.files[0]);
+
             document.getElementById('game-container').innerHTML = '<div id="emulator"></div>';
-            EJS_player = '#emulator'; EJS_gameUrl = opt.value; EJS_core = opt.getAttribute('data-core');
-            EJS_pathtodata = 'https://jsdelivr.net';
+
+            EJS_player = '#emulator';
+            EJS_gameUrl = fileBlob;
+            EJS_core = coreSelect.value;
+            
+            // CRUCIAL: Points the script engine straight to your local data folder path instead of online servers
+            EJS_pathtodata = 'data/'; 
+
             const loader = document.createElement('script');
-            loader.src = 'https://jsdelivr.netloader.js';
+            loader.src = 'data/loader.js'; // Loads your local loader asset file
             document.body.appendChild(loader);
         }
     </script>
