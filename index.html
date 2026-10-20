@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solarion Arcade</title>
+    <title>Solarion Offline Arcade</title>
     <style>
         body { background: #121212; color: #fff; font-family: system-ui, sans-serif; text-align: center; margin: 0; padding: 20px; }
         .brand-header { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; }
@@ -26,22 +26,53 @@
     </div>
     <p class="sub">Select a game to inject it straight into an unblockable about:blank tab. No local drive storage used.</p>
 
-    <!-- Unified Game Repository Matrix Menu (Includes titles like Super Mario Land, Pokémon Emerald, Star Fox 64, etc.) -->
+    <!-- Unified Game Repository Matrix Menu -->
     <div class="grid-container">
         <div class="game-card">
-            <div class="game-title">Super Mario Land (GB) & More</div>
+            <div class="game-title">Super Mario Land (GB)</div>
             <button class="play-btn" onclick="launchStealthGame('vault/super_mario_land.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Pokémon Emerald (GBA)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/pokemon_emerald.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Super Mario Advance 1 (GBA)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/super_mario_advance1.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Star Fox 64 (N64)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/star_fox_64.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Super Smash Bros 64 (N64)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/super_smash_bros_64.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Pokémon Black (NDS)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/pokemon_black.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Kirby Super Star Ultra (NDS)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/kirby_super_star_ultra.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">New Super Mario Bros. (NDS)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/new_super_mario_bros.html')">Launch Game</button>
         </div>
     </div>
 
     <script>
+        // FIXED CLOAK ENGINE: Streams website-hosted HTML games directly into about:blank viewport space
         function launchStealthGame(targetGameUrl) {
+            // Spawns the clean canvas tab instance window
             const stealthTab = window.open('about:blank', '_blank');
             if (!stealthTab) {
                 alert("Pop-up blocked! Please allow popups for this site in your address bar.");
                 return;
             }
 
+            // Instructs the new blank window context to open an unblockable full-screen viewport iframe pointing to your hosted file path
             stealthTab.document.open();
             stealthTab.document.write(`
                 <html>
