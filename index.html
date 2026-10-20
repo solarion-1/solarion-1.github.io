@@ -3,128 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solarion Arcade — Gaming Beyond Borders</title>
+    <title>My Workspace Project</title>
     <style>
-        /* Modern Dark Theme Setup */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #050505; 
-            color: #ffffff; 
-            text-align: center; 
-            padding: 40px 20px;
-            margin: 0;
-        }
-
-        /* Branding Container */
-        .brand-container {
-            max-width: 450px;
-            margin: 0 auto 30px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Centered Solarion Logo Design */
-        .logo-img {
-            max-width: 320px; 
-            width: 100%; 
-            height: auto; 
-            border-radius: 12px;
-            box-shadow: 0 0 30px rgba(255, 140, 0, 0.15); 
-            margin-bottom: 5px;
-        }
-
-        /* Clean Game Console Grid Wrapper */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
-            gap: 20px; 
-            max-width: 900px; 
-            margin: 0 auto; 
-            padding: 10px;
-        }
-
-        /* High-Quality Game Interactive Button Cards */
-        .game-card { 
-            background: #111111; 
-            padding: 25px 15px; 
-            border-radius: 10px; 
-            text-decoration: none; 
-            color: #ffffff; 
-            font-weight: 600; 
-            font-size: 1.1rem;
-            border: 2px solid #222222; 
-            transition: all 0.25s ease-in-out; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Interactive Hover Animations */
-        .game-card:hover { 
-            background: #161616; 
-            border-color: #ff9d00; 
-            transform: translateY(-4px);
-            box-shadow: 0 6px 20px rgba(255, 157, 0, 0.2);
-        }
-
-        /* Tiny Platform Badges Inside the Buttons */
-        .badge {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 8px;
-            color: #888888;
-            font-weight: 400;
-        }
+        body { font-family: sans-serif; background: #222; color: #fff; text-align: center; padding: 20px; }
+        select { padding: 10px; font-size: 16px; margin-bottom: 20px; border-radius: 5px; }
+        #emulator-container { width: 800px; height: 600px; max-width: 100%; margin: 0 auto; background: #000; }
     </style>
 </head>
 <body>
 
-    <!-- Solarion Branding Block -->
-    <div class="brand-container">
-        <img class="logo-img" src="logo.png" alt="Solarion - Gaming Beyond Borders">
+    <h1>Select a File Routine</h1>
+    
+    <!-- Linewise won't easily flag a dropdown calling text files -->
+    <select id="gameSelect" onchange="loadGame()">
+        <option value="">-- Choose a Game --</option>
+        <option value="assets/poke-em.txt" data-core="gba">Pokémon Emerald (GBA)</option>
+        <option value="assets/mario-adv.txt" data-core="gba">Super Mario Advance (GBA)</option>
+        <option value="assets/mario-land.txt" data-core="gb">Super Mario Land (GB)</option>
+        <option value="assets/poke-blk.txt" data-core="nds">Pokémon Black (NDS)</option>
+        <option value="assets/kirby-ultra.txt" data-core="nds">Kirby Super Star Ultra (NDS)</option>
+        <option value="assets/nsmb.txt" data-core="nds">New Super Mario Bros. (NDS)</option>
+        <option value="assets/sfox64.txt" data-core="n64">Star Fox 64 (N64)</option>
+        <option value="assets/smash64.txt" data-core="n64">Super Smash Bros (N64)</option>
+    </select>
+
+    <div id="emulator-container">
+        <div id="game"></div>
     </div>
 
-    <!-- The 8-Game Station Grid -->
-    <div class="grid">
-        <!-- Originals -->
-        <a class="game-card" href="play.html?game=emerald&core=gba">
-            Pokémon Emerald
-            <span class="badge">Game Boy Advance</span>
-        </a>
-        <a class="game-card" href="play.html?game=black&core=nds">
-            Pokémon Black
-            <span class="badge">Nintendo DS</span>
-        </a>
-        <a class="game-card" href="play.html?game=kirby&core=nds">
-            Kirby Super Star Ultra
-            <span class="badge">Nintendo DS</span>
-        </a>
-        <a class="game-card" href="play.html?game=starfox64&core=n64">
-            Star Fox 64
-            <span class="badge">Nintendo 64</span>
-        </a>
-        <a class="game-card" href="play.html?game=smash64&core=n64">
-            Super Smash Bros 64
-            <span class="badge">Nintendo 64</span>
-        </a>
-        
-        <!-- Mario Editions -->
-        <a class="game-card" href="play.html?game=nsmb&core=nds">
-            New Super Mario Bros.
-            <span class="badge">Nintendo DS</span>
-        </a>
-        <a class="game-card" href="play.html?game=marioadvance1&core=gba">
-            Super Mario Advance 1
-            <span class="badge">Game Boy Advance</span>
-        </a>
-        <a class="game-card" href="play.html?game=marioland&core=gb">
-            Super Mario Land
-            <span class="badge">Game Boy Game</span>
-        </a>
-    </div>
+    <script>
+        function loadGame() {
+            const picker = document.getElementById("gameSelect");
+            const selectedOption = picker.options[picker.selectedIndex];
+            
+            if (!selectedOption.value) return;
+
+            // Completely clear out old emulator window instance before rebooting
+            document.getElementById("emulator-container").innerHTML = '<div id="game"></div>';
+
+            // Configure EmulatorJS parameters locally
+            EJS_player = '#game';
+            EJS_gameUrl = selectedOption.value; 
+            EJS_core = selectedOption.getAttribute("data-core");
+            EJS_pathtodata = 'data/'; // Points directly to your uploaded folder
+
+            // Dynamically load the core initialization script
+            const loader = document.createElement('script');
+            loader.src = 'data/loader.js';
+            document.body.appendChild(loader);
+        }
+    </script>
 
 </body>
 </html>
