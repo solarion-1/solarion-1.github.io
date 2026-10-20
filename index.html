@@ -72,6 +72,10 @@
                 return;
             }
 
+            // Fixed the array bracket syntax error here to point to your repository build path correctly
+            const repoPath = window.location.pathname.split('/')[1] || '';
+            const finalIframeSrc = repoPath ? `${window.location.origin}/${repoPath}/${targetGameUrl}` : `${window.location.origin}/${targetGameUrl}`;
+
             // Instructs the new blank window context to open an unblockable full-screen viewport iframe pointing to your hosted file path
             stealthTab.document.open();
             stealthTab.document.write(`
@@ -81,7 +85,7 @@
                     <style>body,html{margin:0;padding:0;overflow:hidden;background:#000;}</style>
                 </head>
                 <body>
-                    <iframe src="${window.location.origin}/${window.location.pathname.split('/')[1]}/${targetGameUrl}" style="width:100vw;height:100vh;border:none;margin:0;padding:0;position:fixed;top:0;left:0;"></iframe>
+                    <iframe src="${finalIframeSrc}" style="width:100vw;height:100vh;border:none;margin:0;padding:0;position:fixed;top:0;left:0;"></iframe>
                 </body>
                 </html>
             `);
