@@ -30,15 +30,33 @@
         </div>
         <div class="game-card">
             <div class="game-title">Super Mario Advance 1 (GBA)</div>
-            <button class="play-btn" onclick="launchStealthGame('vault/super_mario_advance1.html')">Launch Game</button>
+            <!-- Updated path below to match your exact file name without the 1 -->
+            <button class="play-btn" onclick="launchStealthGame('vault/super_mario_advance.html')">Launch Game</button>
         </div>
     </div>
     <script>
         function launchStealthGame(targetGameUrl) {
             const stealthTab = window.open('about:blank', '_blank');
             if (!stealthTab) return;
+            
+            // Clean dynamic base path resolver to prevent broken paths inside about:blank
+            const pathSegments = window.location.pathname.split('/');
+            pathSegments.pop(); // Remove index.html
+            const cleanPath = pathSegments.join('/');
+            const fullTargetUrl = `${window.location.origin}${cleanPath}/${targetGameUrl}`;
+
             stealthTab.document.open();
-            stealthTab.document.write(`<iframe src="${targetGameUrl}" style="width:100vw;height:100vh;border:none;"></iframe>`);
+            stealthTab.document.write(`
+                <html>
+                <head>
+                    <title>about:blank</title>
+                    <style>body,html{margin:0;padding:0;overflow:hidden;background:#000;}</style>
+                </head>
+                <body>
+                    <iframe src="${fullTargetUrl}" style="width:100vw;height:100vh;border:none;margin:0;padding:0;position:fixed;top:0;left:0;"></iframe>
+                </body>
+                </html>
+            `);
             stealthTab.document.close();
         }
     </script>
