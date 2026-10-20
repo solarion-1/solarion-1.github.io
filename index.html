@@ -6,97 +6,86 @@
     <title>Solarion Offline Arcade</title>
     <style>
         body { background: #121212; color: #fff; font-family: system-ui, sans-serif; text-align: center; margin: 0; padding: 20px; }
-        
-        /* Styled Brand Header Container */
         .brand-header { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; }
         .site-logo { max-width: 150px; height: auto; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         h1 { color: #ffcc00; text-shadow: 2px 2px #000; margin: 0; }
-        
-        .sub { color: #aaa; font-size: 13px; margin-bottom: 20px; }
-        .box { max-width: 600px; margin: 15px auto; padding: 15px; border-radius: 8px; text-align: left; }
-        .stealth-box { background: #112233; border: 2px solid #00ffcc; }
-        .offline-box { background: #221111; border: 2px dashed #ff4444; }
-        .btn { padding: 10px 20px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
-        .btn-cyan { background: #00ffcc; color: #000; }
-        .btn-red { background: #ff4444; color: #fff; }
-        #game-container { width: 640px; height: 480px; max-width: 100%; margin: 20px auto; background: #000; border: 4px solid #333; }
-        #emulator { width: 100%; height: 100%; }
-        select, input[type="file"] { padding: 8px; background: #222; color: #fff; border: 1px solid #555; border-radius: 4px; margin-top: 5px; }
+        .sub { color: #aaa; font-size: 13px; margin-bottom: 25px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; max-width: 900px; margin: 0 auto; }
+        .game-card { background: #1c1c1c; border: 2px solid #333; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: 0.2s; }
+        .game-card:hover { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.1); }
+        .game-title { font-weight: bold; margin-bottom: 10px; color: #fff; }
+        .play-btn { width: 100%; padding: 10px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .play-btn:hover { background: #00cc99; }
     </style>
 </head>
 <body>
 
-    <!-- Header Section Utilizing Your Stored Logo -->
     <div class="brand-header">
-        <img src="Designer.png" alt="Solarion Logo" class="site-logo">
-        <h1>Solarion Arcade (Offline Edition)</h1>
+        <img src="Designer.png" alt="Solarion Logo" class="site-logo" onerror="this.style.display='none'">
+        <h1>Solarion Arcade Cloud Vault</h1>
     </div>
-    <p class="sub">Fully functional on Chromebooks and Windows with internet completely disabled.</p>
+    <p class="sub">Select a game to inject it straight into an unblockable about:blank tab. No local drive storage used.</p>
 
-    <!-- STEP 1: Cloaked Tab Spawner -->
-    <div class="box stealth-box">
-        <strong>🔒 Step 1: Open Cloaked Window</strong>
-        <p style="font-size:12px; margin:5px 0; color:#88aabb;">Injects the code architecture directly into an about:blank canvas so background trackers see an empty browser instance.</p>
-        <button class="btn btn-cyan" onclick="spawnCloakedOffline()">Launch about:blank Arcade</button>
-    </div>
-
-    <!-- STEP 2: Injection Mechanism for Raw Local Files -->
-    <div class="box offline-box">
-        <strong>📁 Step 2: Inject Local Game File</strong>
-        <p style="font-size:12px; margin:5px 0; color:#ccaabb;">Select a game file saved anywhere on your computer or USB, choose the system, and boot.</p>
-        <input type="file" id="rom-file" accept=".gb,.gba,.z64,.n64,.nds">
-        <br>
-        <select id="core-select">
-            <option value="gb">Game Boy (GB)</option>
-            <option value="gba">Game Boy Advance (GBA)</option>
-            <option value="n64">Nintendo 64 (N64)</option>
-            <option value="nds">Nintendo DS (NDS)</option>
-        </select>
-        <button class="btn btn-red" onclick="bootOfflineGame()">Boot Game Engine</button>
-    </div>
-
-    <div id="game-container">
-        <div id="emulator"></div>
+    <!-- Unified Game Repository Matrix Menu -->
+    <div class="grid-container">
+        <div class="game-card">
+            <div class="game-title">Super Mario Land (GB)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/super_mario_land.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Pokémon Emerald (GBA)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/pokemon_emerald.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Super Mario Advance 1 (GBA)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/super_mario_advance1.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Star Fox 64 (N64)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/star_fox_64.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Super Smash Bros 64 (N64)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/super_smash_bros_64.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Pokémon Black (NDS)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/pokemon_black.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Kirby Super Star Ultra (NDS)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/kirby_super_star_ultra.html')">Launch Game</button>
+        </div>
+        <div class="game-card">
+            <div class="game-title">New Super Mario Bros. (NDS)</div>
+            <button class="play-btn" onclick="launchStealthGame('vault/new_super_mario_bros.html')">Launch Game</button>
+        </div>
     </div>
 
     <script>
-        function spawnCloakedOffline() {
-            const currentHTML = document.documentElement.outerHTML;
-            const targetTab = window.open('about:blank', '_blank');
-            if (!targetTab) {
-                alert("Pop-up blocked! Please click the icon in your address bar and allow popups.");
-                return;
-            }
-            targetTab.document.open();
-            targetTab.document.write(currentHTML);
-            targetTab.document.close();
-        }
-
-        function bootOfflineGame() {
-            const fileInput = document.getElementById('rom-file');
-            const coreSelect = document.getElementById('core-select');
-            
-            if (fileInput.files.length === 0) {
-                alert("Please pick a game file first!");
+        // FIXED CLOAK ENGINE: Streams website-hosted HTML games directly into about:blank viewport space
+        function launchStealthGame(targetGameUrl) {
+            // Spawns the clean canvas tab instance window
+            const stealthTab = window.open('about:blank', '_blank');
+            if (!stealthTab) {
+                alert("Pop-up blocked! Please allow popups for this site in your address bar.");
                 return;
             }
 
-            const fileBlob = URL.createObjectURL(fileInput.files);
-            document.getElementById('game-container').innerHTML = '<div id="emulator"></div>';
-
-            EJS_player = '#emulator';
-            EJS_gameUrl = fileBlob;
-            EJS_core = coreSelect.value;
-            
-            // Customizes EmulatorJS splash screens with your logo asset path
-            EJS_backgroundImage = 'Designer.png'; 
-            EJS_backgroundBlur = true; // Blurs background art cleanly behind buttons
-
-            EJS_pathtodata = 'data/'; 
-
-            const loader = document.createElement('script');
-            loader.src = 'data/loader.js';
-            document.body.appendChild(loader);
+            // Instructs the new blank window context to open an unblockable full-screen viewport iframe pointing to your hosted file path
+            stealthTab.document.open();
+            stealthTab.document.write(`
+                <html>
+                <head>
+                    <title>about:blank</title>
+                    <style>body,html{margin:0;padding:0;overflow:hidden;background:#000;}</style>
+                </head>
+                <body>
+                    <iframe src="${window.location.origin}/${window.location.pathname.split('/')[1]}/${targetGameUrl}" style="width:100vw;height:100vh;border:none;margin:0;padding:0;position:fixed;top:0;left:0;"></iframe>
+                </body>
+                </html>
+            `);
+            stealthTab.document.close();
         }
     </script>
 </body>
