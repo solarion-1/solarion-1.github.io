@@ -39,20 +39,19 @@
             <div class="game-title">Super Smash Bros 64 (N64)</div>
             <button class="play-btn" onclick="launchGameTab('vault/super_smash_bros_64.html')">Launch Game</button>
         </div>
+        <div class="game-card">
+            <div class="game-title">Kirby Super Star Ultra (NDS)</div>
+            <button class="play-btn" onclick="launchGameTab('https://github.com/solarion-1/solarion-1.github.io/releases/download/v1.0/kirby_ultra.html')">Launch Game</button>
+        </div>
     </div>
 
     <script>
         function launchGameTab(targetGameUrl) {
-            // Opens a new tab instance directly on your unblocked domain path
             const gameTab = window.open(targetGameUrl, '_blank');
-            
             if (!gameTab) {
                 alert("Pop-up blocked! Please allow popups for this site in your address bar.");
                 return;
             }
-            
-            // Explicitly commands the new tab instance window to take focus
-            // This guarantees keyboard commands and fullscreen permissions map cleanly
             gameTab.focus();
         }
     </script>
