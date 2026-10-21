@@ -19,10 +19,13 @@
     </style>
 </head>
 <body>
+    <!-- Brand Header Section with Designer.png Logo Included -->
     <div class="brand-header">
+        <img src="Designer.png" alt="Solarion Logo" class="site-logo" onerror="this.style.display='none'">
         <h1>Solarion Arcade Cloud Vault</h1>
     </div>
     <p class="sub">Select a game to launch it in a stealth tab.</p>
+    
     <div class="grid-container">
         <div class="game-card">
             <div class="game-title">Pokémon Emerald (GBA)</div>
@@ -34,10 +37,10 @@
         </div>
         <div class="game-card">
             <div class="game-title">Super Smash Bros 64 (N64)</div>
-            <!-- Updated to match your exact layout filename with underscores -->
             <button class="play-btn" onclick="launchStealthGame('vault/super_smash_bros_64.html')">Launch Game</button>
         </div>
     </div>
+    
     <script>
         function launchStealthGame(targetGameUrl) {
             const stealthTab = window.open('about:blank', '_blank');
