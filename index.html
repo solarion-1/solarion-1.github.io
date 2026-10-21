@@ -14,12 +14,8 @@
         .game-card { background: #1c1c1c; border: 2px solid #333; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: 0.2s; }
         .game-card:hover { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.1); }
         .game-title { font-weight: bold; margin-bottom: 10px; color: #fff; }
-        .play-btn { width: 100%; padding: 10px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .play-btn { width: 100%; padding: 12px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; transition: 0.2s; }
         .play-btn:hover { background: #00cc99; }
-        
-        /* Direct Page Display Frame Container */
-        #display-viewport { width: 640px; height: 480px; max-width: 100%; margin: 30px auto; background: #000; border: 4px solid #333; border-radius: 6px; box-shadow: 0px 10px 20px rgba(0,0,0,0.5); display: none; }
-        #game-frame { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
@@ -28,42 +24,36 @@
         <img src="Designer.png" alt="Solarion Logo" class="site-logo" onerror="this.style.display='none'">
         <h1>Solarion Arcade Cloud Vault</h1>
     </div>
-    <p class="sub">Select a game to boot the emulator engine directly inside the page window below.</p>
+    <p class="sub">Select a game to open it in a new tab with full hardware feature capabilities.</p>
     
     <div class="grid-container">
         <div class="game-card">
             <div class="game-title">Pokémon Emerald (GBA)</div>
-            <button class="play-btn" onclick="bootGameDirectly('vault/pokemon_emerald.html')">Launch Game</button>
+            <button class="play-btn" onclick="launchGameTab('vault/pokemon_emerald.html')">Launch Game</button>
         </div>
         <div class="game-card">
             <div class="game-title">Super Mario Advance 1 (GBA)</div>
-            <button class="play-btn" onclick="bootGameDirectly('vault/super_mario_advance.html')">Launch Game</button>
+            <button class="play-btn" onclick="launchGameTab('vault/super_mario_advance.html')">Launch Game</button>
         </div>
         <div class="game-card">
             <div class="game-title">Super Smash Bros 64 (N64)</div>
-            <button class="play-btn" onclick="playInSameTab('vault/super_smash_bros_64.html')">Launch Game</button>
+            <button class="play-btn" onclick="launchGameTab('vault/super_smash_bros_64.html')">Launch Game</button>
         </div>
     </div>
 
-    <!-- The Display Area Where Games Load Instantly -->
-    <div id="display-viewport">
-        <iframe id="game-frame" src="" allow="autoplay"></iframe>
-    </div>
-    
     <script>
-        // Option A: Embeds the game layout smoothly right under your buttons
-        function bootGameDirectly(targetGameUrl) {
-            const viewport = document.getElementById('display-viewport');
-            const frame = document.getElementById('game-frame');
+        function launchGameTab(targetGameUrl) {
+            // Opens a new tab instance directly on your unblocked domain path
+            const gameTab = window.open(targetGameUrl, '_blank');
             
-            frame.src = targetGameUrl;
-            viewport.style.display = 'block';
-            viewport.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Option B: For heavy N64 files, this forces the tab to rewrite itself to avoid lag
-        function playInSameTab(targetGameUrl) {
-            window.location.href = targetGameUrl;
+            if (!gameTab) {
+                alert("Pop-up blocked! Please allow popups for this site in your address bar.");
+                return;
+            }
+            
+            // Explicitly commands the new tab instance window to take focus
+            // This guarantees keyboard commands and fullscreen permissions map cleanly
+            gameTab.focus();
         }
     </script>
 </body>
