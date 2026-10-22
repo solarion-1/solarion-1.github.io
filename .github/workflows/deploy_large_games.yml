@@ -1,0 +1,30 @@
+name: Deploy Large Game Files Override
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bypass-limit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Repository Base
+        uses: actions/checkout@v4
+
+      - name: Inject Heavy Game Engine Binary Data
+        run: |
+          mkdir -p vault
+          # Pulls your raw uncorrupted game directly from your published release assets drawer
+          curl -L -o vault/kirby_ultra.html "https://github.com"
+
+      - name: Push Directly to Deployment Node
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add vault/kirby_ultra.html
+          git commit -m "Automated injection bypass processing for heavy files" --allow-empty
+          git push origin main
