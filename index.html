@@ -16,6 +16,7 @@
         .game-title { font-weight: bold; margin-bottom: 10px; color: #fff; }
         .play-btn { width: 100%; padding: 12px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; transition: 0.2s; }
         .play-btn:hover { background: #00cc99; }
+        .loading-text { font-size: 12px; color: #ffcc00; margin-top: 5px; display: none; }
     </style>
 </head>
 <body>
@@ -41,18 +42,49 @@
         </div>
         <div class="game-card">
             <div class="game-title">Kirby Super Star Ultra (NDS)</div>
-            <button class="play-btn" onclick="launchGameTab('vault/kirby_ultra.html')">Launch Game</button>
+            <!-- Fetches file manually using a dynamic memory array blob -->
+            <button class="play-btn" onclick="streamLargeReleaseFile('https://github.com', this)">Launch Game</button>
+            <div class="loading-text">Streaming heavy cloud file...</div>
         </div>
     </div>
 
     <script>
         function launchGameTab(targetGameUrl) {
             const gameTab = window.open(targetGameUrl, '_blank');
-            if (!gameTab) {
-                alert("Pop-up blocked! Please allow popups for this site in your address bar.");
-                return;
+            if (gameTab) gameTab.focus();
+        }
+
+        async function streamLargeReleaseFile(releaseUrl, buttonEl) {
+            const loadText = buttonEl.nextElementSibling;
+            buttonEl.disabled = true;
+            buttonEl.style.background = "#555";
+            loadText.style.display = "block";
+
+            try {
+                // Fetch game string directly from release repository drawer
+                const response = await fetch(releaseUrl);
+                if (!response.ok) throw new Error("Stream offline");
+                
+                const textCode = await response.text();
+                
+                // Pack text data straight into a functional active temporary runtime memory blob URL path
+                const localBlob = new Blob([textCode], { type: 'text/html' });
+                const runtimeBlobUrl = URL.createObjectURL(localBlob);
+
+                const gameTab = window.open(runtimeBlobUrl, '_blank');
+                if (!gameTab) {
+                    alert("Popup blocked! Please allow popups for this site.");
+                } else {
+                    gameTab.focus();
+                }
+            } catch (err) {
+                alert("Could not load release file asset stream.");
+                console.error(err);
+            } finally {
+                buttonEl.disabled = false;
+                buttonEl.style.background = "#00ffcc";
+                loadText.style.display = "none";
             }
-            gameTab.focus();
         }
     </script>
 </body>
