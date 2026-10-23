@@ -16,6 +16,7 @@
         .game-title { font-weight: bold; margin-bottom: 10px; color: #fff; }
         .play-btn { width: 100%; padding: 12px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; transition: 0.2s; }
         .play-btn:hover { background: #00cc99; }
+        .status-msg { font-size: 11px; color: #ffcc00; margin-top: 5px; display: none; }
     </style>
 </head>
 <body>
@@ -24,36 +25,66 @@
         <img src="Designer.png" alt="Solarion Logo" class="site-logo" onerror="this.style.display='none'">
         <h1>Solarion Arcade Cloud Vault</h1>
     </div>
-    <p class="sub">Select a game to open it in a new tab with full hardware feature capabilities.</p>
+    <p class="sub">Select a game to stream its offline assets straight into a fresh workspace window tab.</p>
     
     <div class="grid-container">
         <div class="game-card">
             <div class="game-title">Pokémon Emerald (GBA)</div>
-            <button class="play-btn" onclick="launchGameTab('vault/pokemon_emerald.html')">Launch Game</button>
+            <button class="play-btn" onclick="injectOfflineStream('vault/pokemon_emerald.html', this)">Launch Game</button>
+            <div class="status-msg">Mounting system arrays...</div>
         </div>
         <div class="game-card">
             <div class="game-title">Super Mario Advance 1 (GBA)</div>
-            <button class="play-btn" onclick="launchGameTab('vault/super_mario_advance.html')">Launch Game</button>
+            <button class="play-btn" onclick="injectOfflineStream('vault/super_mario_advance.html', this)">Launch Game</button>
+            <div class="status-msg">Mounting system arrays...</div>
         </div>
         <div class="game-card">
             <div class="game-title">Super Smash Bros 64 (N64)</div>
-            <button class="play-btn" onclick="launchGameTab('vault/super_smash_bros_64.html')">Launch Game</button>
+            <button class="play-btn" onclick="injectOfflineStream('vault/super_smash_bros_64.html', this)">Launch Game</button>
+            <div class="status-msg">Mounting system arrays...</div>
         </div>
         <div class="game-card">
             <div class="game-title">Kirby Super Star Ultra (NDS)</div>
-            <!-- PASTE YOUR COPIED CATBOX LINK BETWEEN THE QUOTES BELOW -->
-            <button class="play-btn" onclick="launchGameTab('https://files.catbox.moe/b0ee3x.html')">Launch Game</button>
+            <button class="play-btn" onclick="injectOfflineStream('vault/kirby_ultra.html', this)">Launch Game</button>
+            <div class="status-msg">Mounting system arrays...</div>
         </div>
     </div>
 
     <script>
-        function launchGameTab(targetGameUrl) {
-            const gameTab = window.open(targetGameUrl, '_blank');
-            if (!gameTab) {
-                alert("Pop-up blocked! Please allow popups for this site in your address bar.");
-                return;
+        async function injectOfflineStream(targetFileUrl, buttonEl) {
+            const statusEl = buttonEl.nextElementSibling;
+            buttonEl.disabled = true;
+            buttonEl.style.background = "#555";
+            statusEl.style.display = "block";
+
+            try {
+                // Fetch the 100% offline file text directly from your repository path
+                const response = await fetch(targetFileUrl);
+                if (!response.ok) throw new Error("File target unavailable");
+                const htmlContent = await response.text();
+
+                // Convert file raw layout data directly into a localized browser memory stream
+                const localBlob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+                const blobUrl = URL.createObjectURL(localBlob);
+
+                // Open clean tab canvas
+                const arcadeTab = window.open('', '_blank');
+                if (!arcadeTab) {
+                    alert("Pop-up blocked! Allow popups in your URL address bar.");
+                    return;
+                }
+
+                // Force layout injection using browser device core mapping
+                arcadeTab.location.href = blobUrl;
+
+            } catch (err) {
+                alert("Failed to inject offline system assets. Check file pathways inside your vault folder.");
+                console.error(err);
+            } finally {
+                buttonEl.disabled = false;
+                buttonEl.style.background = "#00ffcc";
+                statusEl.style.display = "none";
             }
-            gameTab.focus();
         }
     </script>
 </body>
