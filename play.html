@@ -2,19 +2,19 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Pokémon Emerald</title>
+<title>Solarion Emulator</title>
 
 <style>
-html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    background:black;
 }
 
-#game {
-    width: 100%;
-    height: 100%;
+#game{
+    width:100%;
+    height:100%;
 }
 </style>
 </head>
@@ -24,13 +24,27 @@ html, body {
 
 <script>
 const params = new URLSearchParams(window.location.search);
+const rom = params.get("rom");
 
 EJS_player = "#game";
-EJS_core = "gba";
-EJS_gameUrl = params.get("rom");
-
-/* Use EmulatorJS CDN */
+EJS_gameUrl = rom;
 EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
+
+/* Automatically detect console */
+
+if (rom.endsWith(".gba")) {
+    EJS_core = "gba";
+}
+else if (
+    rom.endsWith(".z64") ||
+    rom.endsWith(".n64") ||
+    rom.endsWith(".v64")
+) {
+    EJS_core = "n64";
+}
+else {
+    EJS_core = "gba";
+}
 </script>
 
 <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
