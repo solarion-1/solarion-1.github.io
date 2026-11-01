@@ -1,154 +1,45 @@
+<script>
+function streamGameRom(romRelativePath) {
+
+    const romUrl = new URL(
+        romRelativePath,
+        window.location.href
+    ).href;
+
+    const emulatorPage = `
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solarion Arcade Cloud Vault</title>
-
+    <title>Pokémon Emerald</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            padding: 20px;
-            background: #121212;
-            color: white;
-            font-family: system-ui, sans-serif;
-            text-align: center;
-        }
-
-        .brand-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .site-logo {
-            width: 150px;
-            max-width: 90%;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-        }
-
-        h1 {
-            margin: 0;
-            color: #ffcc00;
-            text-shadow: 2px 2px 4px #000;
-        }
-
-        .sub {
-            color: #aaa;
-            margin: 15px 0 30px;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 700px;
-            margin: auto;
-        }
-
-        .game-card {
-            background: #1c1c1c;
-            border: 2px solid #333;
-            border-radius: 12px;
-            padding: 20px;
-            transition: 0.25s ease;
-        }
-
-        .game-card:hover {
-            border-color: #00ffcc;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .game-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-
-        .play-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            background: #00ffcc;
-            color: #000;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .play-btn:hover {
-            background: #00cc99;
-        }
-
-        footer {
-            margin-top: 40px;
-            color: #666;
-            font-size: 13px;
+        body{
+            margin:0;
+            background:black;
         }
     </style>
 </head>
 <body>
-
-    <div class="brand-header">
-        <img
-            src="Designer.png"
-            alt="Solarion Logo"
-            class="site-logo"
-            onerror="this.style.display='none';"
-        >
-
-        <h1>Solarion Arcade Cloud Vault</h1>
-    </div>
-
-    <p class="sub">
-        Select a game and launch it in a new emulator window.
-    </p>
-
-    <div class="grid-container">
-
-        <div class="game-card">
-            <div class="game-title">
-                Pokémon Emerald (GBA)
-            </div>
-
-            <button
-                class="play-btn"
-                onclick="streamGameRom('vault/emerald.gba')">
-                Launch Game
-            </button>
-        </div>
-
-    </div>
-
-    <footer>
-        Solarion Arcade • GitHub Pages Edition
-    </footer>
+    <div id="game"></div>
 
     <script>
-        function streamGameRom(romRelativePath) {
+        EJS_player = "#game";
+        EJS_core = "gba";
+        EJS_gameUrl = "${romUrl}";
+        EJS_pathtodata = "${window.location.origin}/data/";
+    <\/script>
 
-            const romUrl = new URL(
-                romRelativePath,
-                window.location.href
-            ).href;
-
-            console.log("ROM URL:", romUrl);
-
-            // Opens ROM directly in a new tab
-            // Replace this later if you install EmulatorJS locally
-            window.open(romUrl, "_blank");
-        }
-    </script>
-
+    <script src="${window.location.origin}/data/loader.js"><\/script>
 </body>
-</html>
+</html>`;
+
+    const gameTab = window.open("", "_blank");
+
+    if (!gameTab) {
+        alert("Please allow popups.");
+        return;
+    }
+
+    gameTab.document.write(emulatorPage);
+    gameTab.document.close();
+}
+</script>
