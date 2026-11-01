@@ -1,45 +1,53 @@
-<script>
-function streamGameRom(romRelativePath) {
-
-    const romUrl = new URL(
-        romRelativePath,
-        window.location.href
-    ).href;
-
-    const emulatorPage = `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Pokémon Emerald</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solarion Arcade Cloud Vault</title>
+
     <style>
-        body{
-            margin:0;
-            background:black;
+        body {
+            background: #121212;
+            color: white;
+            font-family: system-ui, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
         }
-    </style>
-</head>
-<body>
-    <div id="game"></div>
 
-    <script>
-        EJS_player = "#game";
-        EJS_core = "gba";
-        EJS_gameUrl = "${romUrl}";
-        EJS_pathtodata = "${window.location.origin}/data/";
-    <\/script>
+        .brand-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    <script src="${window.location.origin}/data/loader.js"><\/script>
-</body>
-</html>`;
+        .site-logo {
+            max-width: 150px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
 
-    const gameTab = window.open("", "_blank");
+        h1 {
+            color: #ffcc00;
+            margin: 0;
+        }
 
-    if (!gameTab) {
-        alert("Please allow popups.");
-        return;
-    }
+        .sub {
+            color: #aaa;
+            margin-bottom: 25px;
+        }
 
-    gameTab.document.write(emulatorPage);
-    gameTab.document.close();
-}
-</script>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .game-card {
+            background: #1c1c1c;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+        
