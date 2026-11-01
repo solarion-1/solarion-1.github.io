@@ -3,51 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solarion Offline Arcade</title>
+    <title>Solarion Arcade Cloud Vault</title>
+
     <style>
-        body { background: #121212; color: #fff; font-family: system-ui, sans-serif; text-align: center; margin: 0; padding: 20px; }
-        .brand-header { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; }
-        .site-logo { max-width: 150px; height: auto; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h1 { color: #ffcc00; text-shadow: 2px 2px #000; margin: 0; }
-        .sub { color: #aaa; font-size: 13px; margin-bottom: 25px; }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; max-width: 400px; margin: 0 auto; }
-        .game-card { background: #1c1c1c; border: 2px solid #333; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: 0.2s; }
-        .game-card:hover { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.1); }
-        .game-title { font-weight: bold; margin-bottom: 10px; color: #fff; }
-        .play-btn { width: 100%; padding: 12px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; transition: 0.2s; }
-        .play-btn:hover { background: #00cc99; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #121212;
+            color: white;
+            font-family: system-ui, sans-serif;
+            text-align: center;
+        }
+
+        .brand-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .site-logo {
+            width: 150px;
+            max-width: 90%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            margin: 0;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        .sub {
+            color: #aaa;
+            margin: 15px 0 30px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .game-card {
+            background: #1c1c1c;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            transition: 0.25s ease;
+        }
+
+        .game-card:hover {
+            border-color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .game-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .play-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #00ffcc;
+            color: #000;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .play-btn:hover {
+            background: #00cc99;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #666;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
 
     <div class="brand-header">
-        <img src="Designer.png" alt="Solarion Logo" class="site-logo" onerror="this.style.display='none'">
+        <img
+            src="Designer.png"
+            alt="Solarion Logo"
+            class="site-logo"
+            onerror="this.style.display='none';"
+        >
+
         <h1>Solarion Arcade Cloud Vault</h1>
     </div>
-    <p class="sub">Select a game to open it inside an unblocked emulator player window.</p>
-    
+
+    <p class="sub">
+        Select a game and launch it in a new emulator window.
+    </p>
+
     <div class="grid-container">
+
         <div class="game-card">
-            <div class="game-title">Pokémon Emerald (GBA)</div>
-            <button class="play-btn" onclick="streamGameRom('vault/emerald.gba')">Launch Game</button>
+            <div class="game-title">
+                Pokémon Emerald (GBA)
+            </div>
+
+            <button
+                class="play-btn"
+                onclick="streamGameRom('vault/emerald.gba')">
+                Launch Game
+            </button>
         </div>
+
     </div>
+
+    <footer>
+        Solarion Arcade • GitHub Pages Edition
+    </footer>
 
     <script>
         function streamGameRom(romRelativePath) {
-            // Calculates the exact public web URL of your raw game file on GitHub Pages
-            const absoluteRomUrl = `${window.location.origin}${window.location.pathname.split('/').slice(0, -1).join('/')}/${romRelativePath}`;
-            
-            // Fixed system routing link parameters to use native rom variable string mapping
-            const networkEngineUrl = `https://emulatorjs.org{encodeURIComponent(absoluteRomUrl)}`;
-            
-            const gameTab = window.open('', '_blank');
-            if (!gameTab) {
-                alert("Pop-up blocked! Please click the icon in your address bar and allow popups.");
-                return;
-            }
-            gameTab.location.href = networkEngineUrl;
+
+            const romUrl = new URL(
+                romRelativePath,
+                window.location.href
+            ).href;
+
+            console.log("ROM URL:", romUrl);
+
+            // Opens ROM directly in a new tab
+            // Replace this later if you install EmulatorJS locally
+            window.open(romUrl, "_blank");
         }
     </script>
+
 </body>
 </html>
