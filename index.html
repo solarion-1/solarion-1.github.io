@@ -29,18 +29,17 @@
     <div class="grid-container">
         <div class="game-card">
             <div class="game-title">Pokémon Emerald (GBA)</div>
-            <!-- Updated relative path mapping to look for emerald.gba -->
-            <button class="play-btn" onclick="streamGameRom('vault/emerald.gba', 'gba')">Launch Game</button>
+            <button class="play-btn" onclick="streamGameRom('vault/emerald.gba')">Launch Game</button>
         </div>
     </div>
 
     <script>
-        function streamGameRom(romRelativePath, systemCoreString) {
+        function streamGameRom(romRelativePath) {
             // Calculates the exact public web URL of your raw game file on GitHub Pages
             const absoluteRomUrl = `${window.location.origin}${window.location.pathname.split('/').slice(0, -1).join('/')}/${romRelativePath}`;
             
-            // Forwards your local repository file path straight into the public unblocked EmulatorJS sandbox
-            const networkEngineUrl = `https://emulatorjs.org{systemCoreString}&url=${encodeURIComponent(absoluteRomUrl)}`;
+            // Fixed system routing link parameters to use native rom variable string mapping
+            const networkEngineUrl = `https://emulatorjs.org{encodeURIComponent(absoluteRomUrl)}`;
             
             const gameTab = window.open('', '_blank');
             if (!gameTab) {
