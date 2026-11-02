@@ -10,6 +10,12 @@ html, body {
     width: 100%;
     height: 100%;
     background: black;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#debug {
+    padding: 20px;
 }
 
 #game {
@@ -20,35 +26,73 @@ html, body {
 </head>
 <body>
 
+<div id="debug">
+    <h1>Solarion Emulator Debug</h1>
+    <p>Page Loaded ✅</p>
+</div>
+
 <div id="game"></div>
 
 <script>
+window.onerror = function(msg, src, line, col, err) {
+    document.getElementById("debug").innerHTML +=
+        "<p style='color:red'><b>ERROR:</b> " + msg + "</p>";
+};
+
+document.getElementById("debug").innerHTML +=
+    "<p>JavaScript Running ✅</p>";
+
 const params = new URLSearchParams(window.location.search);
 const rom = params.get("rom");
 
-EJS_player = "#game";
-EJS_gameUrl = rom;
+document.getElementById("debug").innerHTML +=
+    "<p>ROM Parameter: " + (rom || "NONE") + "</p>";
 
-/* LOCAL EmulatorJS files */
-EJS_pathtodata = "./data/";
+if (!rom) {
+    document.getElementById("debug").innerHTML +=
+        "<p style='color:yellow'>No ROM specified.</p>";
+} else {
 
-/* Auto-detect system */
-if (rom.endsWith(".gba")) {
-    EJS_core = "gba";
-}
-else if (
-    rom.endsWith(".z64") ||
-    rom.endsWith(".n64") ||
-    rom.endsWith(".v64")
-) {
-    EJS_core = "n64";
-}
-else {
-    EJS_core = "gba";
+    EJS_player = "#game";
+    EJS_gameUrl = rom;
+    EJS_pathtodata = "./data/";
+
+    if (
+        rom.endsWith(".z64") ||
+        rom.endsWith(".n64") ||
+        rom.endsWith(".v64")
+    ) {
+        EJS_core = "n64";
+    }
+    else if (
+        rom.endsWith(".gba")
+    ) {
+        EJS_core = "gba";
+    }
+    else {
+        EJS_core = "gba";
+    }
+
+    document.getElementById("debug").innerHTML +=
+        "<p>Core Selected: " + EJS_core + "</p>";
+
+    const script = document.createElement("script");
+
+    script.onload = () => {
+        document.getElementById("debug").innerHTML +=
+            "<p>loader.js Loaded ✅</p>";
+    };
+
+    script.onerror = () => {
+        document.getElementById("debug").innerHTML +=
+            "<p style='color:red'>loader.js FAILED ❌</p>";
+    };
+
+    script.src = "./data/loader.js";
+
+    document.body.appendChild(script);
 }
 </script>
-
-<script src="./data/loader.js"></script>
 
 </body>
 </html>
