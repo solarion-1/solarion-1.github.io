@@ -1,68 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Solarion Emulator</title>
-
-<style>
-html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-    color: white;
-    font-family: Arial, sans-serif;
-}
-
-#debug {
-    padding: 20px;
-    position: relative;
-    z-index: 9999;
-}
-
-#game {
-    width: 100%;
-    height: 100%;
-}
-</style>
+<title>Test</title>
 </head>
-<body>
+<body style="background:black;color:white;">
 
-<div id="debug">
-<h1>Solarion Emulator Debug</h1>
-<p>Page Loaded ✅</p>
-</div>
-
-<div id="game"></div>
+<h1>Step 1 ✅</h1>
 
 <script>
-function log(msg, color="white"){
-    document.getElementById("debug").innerHTML +=
-        "<p style='color:" + color + "'>" + msg + "</p>";
+document.body.innerHTML += "<p>Step 2 ✅ JavaScript works</p>";
+
+try {
+    document.body.innerHTML += "<p>IndexedDB: " + (!!window.indexedDB) + "</p>";
+    document.body.innerHTML += "<p>LocalStorage: " + (!!window.localStorage) + "</p>";
+    document.body.innerHTML += "<p>Worker: " + (!!window.Worker) + "</p>";
+} catch(e) {
+    document.body.innerHTML += "<p style='color:red'>ERROR: " + e + "</p>";
 }
+</script>
 
-window.onerror = function(msg){
-    log("ERROR: " + msg, "red");
-};
-
-log("JavaScript Running ✅");
-
-log("IndexedDB: " + (!!window.indexedDB));
-log("Web Workers: " + (!!window.Worker));
-log("LocalStorage: " + (!!window.localStorage));
-log("SharedArrayBuffer: " + (typeof SharedArrayBuffer !== "undefined"));
-
-const params = new URLSearchParams(window.location.search);
-const rom = params.get("rom");
-
-log("ROM Parameter: " + (rom || "NONE"));
-
-if (!rom) {
-    log("No ROM specified.", "yellow");
-} else {
-
-    EJS_player = "#game";
-    EJS_gameUrl = rom;
-    EJS_pathtodata = "./data/";
-
-  
+</body>
+</html>
