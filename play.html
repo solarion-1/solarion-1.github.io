@@ -1,22 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Test</title>
+<meta charset="UTF-8">
+<title>Test Core Load</title>
+<style>
+body{
+    background:black;
+    color:white;
+    font-family:Arial;
+}
+</style>
 </head>
-<body style="background:black;color:white;">
+<body>
 
-<h1>Step 1 ✅</h1>
+<h1>Core Test</h1>
 
 <script>
-document.body.innerHTML += "<p>Step 2 ✅ JavaScript works</p>";
+fetch("./data/cores/")
+.then(r => {
+    document.body.innerHTML += "<p>cores folder request: " + r.status + "</p>";
+})
+.catch(e => {
+    document.body.innerHTML += "<p>cores folder ERROR</p>";
+});
 
-try {
-    document.body.innerHTML += "<p>IndexedDB: " + (!!window.indexedDB) + "</p>";
-    document.body.innerHTML += "<p>LocalStorage: " + (!!window.localStorage) + "</p>";
-    document.body.innerHTML += "<p>Worker: " + (!!window.Worker) + "</p>";
-} catch(e) {
-    document.body.innerHTML += "<p style='color:red'>ERROR: " + e + "</p>";
-}
+fetch("./data/loader.js")
+.then(r => {
+    document.body.innerHTML += "<p>loader.js: " + r.status + "</p>";
+})
+.catch(e => {
+    document.body.innerHTML += "<p>loader.js ERROR</p>";
+});
+
+fetch("./data/version.json")
+.then(r => {
+    document.body.innerHTML += "<p>version.json: " + r.status + "</p>";
+})
+.catch(e => {
+    document.body.innerHTML += "<p>version.json ERROR</p>";
+});
 </script>
 
 </body>
