@@ -16,6 +16,8 @@ html, body {
 
 #debug {
     padding: 20px;
+    position: relative;
+    z-index: 9999;
 }
 
 #game {
@@ -27,72 +29,40 @@ html, body {
 <body>
 
 <div id="debug">
-    <h1>Solarion Emulator Debug</h1>
-    <p>Page Loaded ✅</p>
+<h1>Solarion Emulator Debug</h1>
+<p>Page Loaded ✅</p>
 </div>
 
 <div id="game"></div>
 
 <script>
-window.onerror = function(msg, src, line, col, err) {
+function log(msg, color="white"){
     document.getElementById("debug").innerHTML +=
-        "<p style='color:red'><b>ERROR:</b> " + msg + "</p>";
+        "<p style='color:" + color + "'>" + msg + "</p>";
+}
+
+window.onerror = function(msg){
+    log("ERROR: " + msg, "red");
 };
 
-document.getElementById("debug").innerHTML +=
-    "<p>JavaScript Running ✅</p>";
+log("JavaScript Running ✅");
+
+log("IndexedDB: " + (!!window.indexedDB));
+log("Web Workers: " + (!!window.Worker));
+log("LocalStorage: " + (!!window.localStorage));
+log("SharedArrayBuffer: " + (typeof SharedArrayBuffer !== "undefined"));
 
 const params = new URLSearchParams(window.location.search);
 const rom = params.get("rom");
 
-document.getElementById("debug").innerHTML +=
-    "<p>ROM Parameter: " + (rom || "NONE") + "</p>";
+log("ROM Parameter: " + (rom || "NONE"));
 
 if (!rom) {
-    document.getElementById("debug").innerHTML +=
-        "<p style='color:yellow'>No ROM specified.</p>";
+    log("No ROM specified.", "yellow");
 } else {
 
     EJS_player = "#game";
     EJS_gameUrl = rom;
     EJS_pathtodata = "./data/";
 
-    if (
-        rom.endsWith(".z64") ||
-        rom.endsWith(".n64") ||
-        rom.endsWith(".v64")
-    ) {
-        EJS_core = "n64";
-    }
-    else if (
-        rom.endsWith(".gba")
-    ) {
-        EJS_core = "gba";
-    }
-    else {
-        EJS_core = "gba";
-    }
-
-    document.getElementById("debug").innerHTML +=
-        "<p>Core Selected: " + EJS_core + "</p>";
-
-    const script = document.createElement("script");
-
-    script.onload = () => {
-        document.getElementById("debug").innerHTML +=
-            "<p>loader.js Loaded ✅</p>";
-    };
-
-    script.onerror = () => {
-        document.getElementById("debug").innerHTML +=
-            "<p style='color:red'>loader.js FAILED ❌</p>";
-    };
-
-    script.src = "./data/loader.js";
-
-    document.body.appendChild(script);
-}
-</script>
-
-</body>
-</html>
+  
