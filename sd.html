@@ -1,150 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Solarion Defense</title>
-
-<style>
-body{
-    margin:0;
-    background:#1a1a1a;
-    color:white;
-    font-family:Arial,sans-serif;
-}
-
-#container{
-    display:flex;
-    height:100vh;
-}
-
-#gameArea{
-    flex:1;
-}
-
-#sidebar{
-    width:250px;
-    background:#222;
-    padding:10px;
-    box-sizing:border-box;
-    border-left:3px solid #111;
-}
-
-#sidebar button{
-    width:100%;
-    margin-bottom:8px;
-    padding:10px;
-    font-size:16px;
-    cursor:pointer;
-}
-
-#stats{
-    margin-bottom:15px;
-}
-
-canvas{
-    display:block;
-    background:#4b8f4b;
-}
-</style>
+<title>Solarion Defense Test</title>
 </head>
-<body>
+<body style="background:black;color:white;font-family:Arial">
 
-<div id="container">
+<h1>Solarion Defense Test</h1>
 
-<div id="gameArea">
-<canvas id="game" width="1200" height="700"></canvas>
-</div>
-
-<div id="sidebar">
-
-<h2>Solarion Defense</h2>
-
-<div id="stats">
-💰 $<span id="money">650</span><br>
-❤️ <span id="lives">100</span><br>
-🌊 <span id="wave">1</span><br><br>
-
-Selected:<br>
-<span id="selected">None</span>
-</div>
-
-<button id="startWave">
-▶ Start Round
+<button onclick="alert('Button Works')">
+Start Round
 </button>
 
-<label>
-<input type="checkbox" id="autoStart">
-Auto Start
-</label>
-
-<hr>
-
-<button onclick="selectTower('dart')">
-🎯 Dart Ranger
-<br>$200
-</button>
-
-<button onclick="selectTower('ninja')">
-🥷 Shadow Ninja
-<br>$500
-</button>
-
-<button onclick="selectTower('farm')">
-🍌 Banana Farm
-<br>$1000
-</button>
-
-</div>
-</div>
+<canvas id="game" width="800" height="500"
+style="background:green"></canvas>
 
 <script>
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+alert("JavaScript Loaded");
 
-let money = 650;
-let lives = 100;
-let wave = 1;
+const canvas =
+document.getElementById("game");
 
-let selectedTower = null;
-let roundRunning = false;
+const ctx =
+canvas.getContext("2d");
 
-const towers = [];
-const enemies = [];
+ctx.strokeStyle="yellow";
+ctx.lineWidth=30;
 
-const path = [
-{x:0,y:350},
-{x:250,y:350},
-{x:250,y:120},
-{x:900,y:120},
-{x:900,y:580},
-{x:1200,y:580}
-];
+ctx.beginPath();
 
-function updateStats(){
-document.getElementById("money").textContent = money;
-document.getElementById("lives").textContent = lives;
-document.getElementById("wave").textContent = wave;
-document.getElementById("selected").textContent =
-selectedTower || "None";
-}
+ctx.moveTo(0,250);
+ctx.lineTo(200,250);
+ctx.lineTo(200,100);
+ctx.lineTo(600,100);
+ctx.lineTo(600,400);
+ctx.lineTo(800,400);
 
-function selectTower(type){
-selectedTower = type;
-updateStats();
-}
+ctx.stroke();
 
-canvas.addEventListener("click", e=>{
+</script>
 
-const rect = canvas.getBoundingClientRect();
-
-const x = e.clientX - rect.left;
-const y = e.clientY - rect.top;
-
-if(selectedTower==="dart" && money>=200){
-
-money-=200;
-
-towers.push({
-type:"dart",
-x,
+</body>
+</html>
