@@ -2,44 +2,53 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Test Core Load</title>
+<title>Solarion Emulator</title>
+
 <style>
-body{
-    background:black;
-    color:white;
-    font-family:Arial;
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+}
+
+#game {
+    width: 100%;
+    height: 100%;
 }
 </style>
 </head>
 <body>
 
-<h1>Core Test</h1>
+<div id="game"></div>
 
 <script>
-fetch("./data/cores/")
-.then(r => {
-    document.body.innerHTML += "<p>cores folder request: " + r.status + "</p>";
-})
-.catch(e => {
-    document.body.innerHTML += "<p>cores folder ERROR</p>";
-});
+const params = new URLSearchParams(window.location.search);
+const rom = params.get("rom");
 
-fetch("./data/loader.js")
-.then(r => {
-    document.body.innerHTML += "<p>loader.js: " + r.status + "</p>";
-})
-.catch(e => {
-    document.body.innerHTML += "<p>loader.js ERROR</p>";
-});
+EJS_player = "#game";
+EJS_color = "#000000";
+EJS_startOnLoaded = true;
 
-fetch("./data/version.json")
-.then(r => {
-    document.body.innerHTML += "<p>version.json: " + r.status + "</p>";
-})
-.catch(e => {
-    document.body.innerHTML += "<p>version.json ERROR</p>";
-});
+if (rom.endsWith(".gba")) {
+    EJS_core = "gba";
+}
+else if (
+    rom.endsWith(".z64") ||
+    rom.endsWith(".n64") ||
+    rom.endsWith(".v64")
+) {
+    EJS_core = "n64";
+}
+
+EJS_gameUrl = rom;
+
+/* Same CDN family that worked on the school Chromebook */
+EJS_pathtodata =
+"https://cdn.jsdelivr.net/gh/bubblfan/emu@master/";
 </script>
+
+<script src="https://cdn.jsdelivr.net/gh/bubblfan/emu@master/loader.js"></script>
 
 </body>
 </html>
