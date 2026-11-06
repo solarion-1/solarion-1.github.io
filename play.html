@@ -26,24 +26,33 @@ html, body {
 const params = new URLSearchParams(window.location.search);
 const rom = params.get("rom");
 
+if (!rom) {
+    document.body.innerHTML =
+        "<h1 style='color:white'>No ROM specified.</h1>";
+    throw new Error("No ROM specified");
+}
+
 EJS_player = "#game";
 EJS_color = "#000000";
 EJS_startOnLoaded = true;
+EJS_gameUrl = rom;
 
-if (rom.endsWith(".gba")) {
+if (rom.toLowerCase().endsWith(".gba")) {
     EJS_core = "gba";
 }
 else if (
-    rom.endsWith(".z64") ||
-    rom.endsWith(".n64") ||
-    rom.endsWith(".v64")
+    rom.toLowerCase().endsWith(".z64") ||
+    rom.toLowerCase().endsWith(".n64") ||
+    rom.toLowerCase().endsWith(".v64")
 ) {
     EJS_core = "n64";
 }
+else {
+    document.body.innerHTML =
+        "<h1 style='color:white'>Unsupported ROM type</h1>";
+    throw new Error("Unsupported ROM type");
+}
 
-EJS_gameUrl = rom;
-
-/* Same CDN family that worked on the school Chromebook */
 EJS_pathtodata =
 "https://cdn.jsdelivr.net/gh/bubblfan/emu@master/";
 </script>
