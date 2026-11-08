@@ -10,7 +10,6 @@
 body{
     margin:0;
     overflow:hidden;
-    background:#1a1a1a;
 }
 </style>
 
@@ -23,10 +22,10 @@ class MainScene extends Phaser.Scene {
 
     create() {
 
-        // Grass background
+        // green background
         this.cameras.main.setBackgroundColor("#4b8f4b");
 
-        // Right-side shop panel
+        // shop panel
         this.add.rectangle(
             1140,
             360,
@@ -35,61 +34,56 @@ class MainScene extends Phaser.Scene {
             0x222222
         );
 
-        // Title
+        // title
         this.add.text(
             1020,
             20,
-            "SOLARION\nDEFENSE",
+            "SOLARION DEFENSE",
             {
-                fontSize: "28px",
-                color: "#ffffff",
-                align: "center"
-            }
-        );
-
-        // Stats
-        this.add.text(
-            1010,
-            120,
-            "💰 $650",
-            {
-                fontSize: "20px",
+                fontSize: "24px",
                 color: "#ffffff"
             }
         );
 
-        this.add.text(
-            1010,
-            155,
-            "❤️ 100",
-            {
-                fontSize: "20px",
-                color: "#ffffff"
-            }
+        // path
+        const g = this.add.graphics();
+
+        g.lineStyle(
+            40,
+            0xd4af37,
+            1
         );
 
-        this.add.text(
-            1010,
-            190,
-            "🌊 Round 1",
-            {
-                fontSize: "20px",
-                color: "#ffffff"
-            }
-        );
+        g.beginPath();
 
-        // Start Round button
-        const startBtn =
-            this.add.rectangle(
-                1080,
-                270,
-                180,
-                50,
-                0x4caf50
-            )
-            .setInteractive();
+        g.moveTo(0,350);
+        g.lineTo(300,350);
+        g.lineTo(300,150);
+        g.lineTo(850,150);
+        g.lineTo(850,550);
+        g.lineTo(1000,550);
 
-        this.add.text(
-            1015,
-            255,
-            "▶ Start
+        g.strokePath();
+
+    }
+
+}
+
+const config = {
+
+    type: Phaser.AUTO,
+
+    width: 1280,
+
+    height: 720,
+
+    scene: MainScene
+
+};
+
+new Phaser.Game(config);
+
+</script>
+
+</body>
+</html>
