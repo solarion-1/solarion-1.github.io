@@ -22,9 +22,13 @@ class MainScene extends Phaser.Scene {
 
     create() {
 
+        this.money = 650;
+        this.lives = 100;
+        this.wave = 1;
+
         this.cameras.main.setBackgroundColor("#4b8f4b");
 
-        // sidebar
+        // Right sidebar
         this.add.rectangle(
             1140,
             360,
@@ -33,7 +37,7 @@ class MainScene extends Phaser.Scene {
             0x222222
         );
 
-        // path
+        // Path
         const g = this.add.graphics();
 
         g.lineStyle(
@@ -53,39 +57,13 @@ class MainScene extends Phaser.Scene {
 
         g.strokePath();
 
-        // enemy test
-        this.enemy =
-            this.add.circle(
-                100,
-                100,
-                15,
-                0xff0000
-            );
-
-    }
-
-    update() {
-
-        this.enemy.x += 1;
-
-        if(this.enemy.x > 900){
-            this.enemy.x = 100;
-        }
-
-    }
-
-}
-
-const config = {
-    type: Phaser.AUTO,
-    width: 1280,
-    height: 720,
-    scene: MainScene
-};
-
-new Phaser.Game(config);
-
-</script>
-
-</body>
-</html>
+        // Title
+        this.add.text(
+            1010,
+            20,
+            "SOLARION DEFENSE",
+            {
+                fontSize:"22px",
+                color:"#ffffff"
+            }
+ 
