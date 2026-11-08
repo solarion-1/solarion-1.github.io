@@ -1,44 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Solarion Defense Test</title>
+<meta charset="UTF-8">
+<title>Solarion Defense</title>
+
+<script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+<script defer src="game.js"></script>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:black;
+}
+</style>
+
 </head>
-<body style="background:black;color:white;font-family:Arial">
-
-<h1>Solarion Defense Test</h1>
-
-<button onclick="alert('Button Works')">
-Start Round
-</button>
-
-<canvas id="game" width="800" height="500"
-style="background:green"></canvas>
-
-<script>
-
-alert("JavaScript Loaded");
-
-const canvas =
-document.getElementById("game");
-
-const ctx =
-canvas.getContext("2d");
-
-ctx.strokeStyle="yellow";
-ctx.lineWidth=30;
-
-ctx.beginPath();
-
-ctx.moveTo(0,250);
-ctx.lineTo(200,250);
-ctx.lineTo(200,100);
-ctx.lineTo(600,100);
-ctx.lineTo(600,400);
-ctx.lineTo(800,400);
-
-ctx.stroke();
-
-</script>
-
+<body>
 </body>
 </html>
