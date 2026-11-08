@@ -10,7 +10,7 @@
 body{
     margin:0;
     overflow:hidden;
-    background:black;
+    background:#1a1a1a;
 }
 </style>
 
@@ -19,37 +19,77 @@ body{
 
 <script>
 
-const config = {
+class MainScene extends Phaser.Scene {
 
-    type: Phaser.AUTO,
+    create() {
 
-    width: 800,
+        // Grass background
+        this.cameras.main.setBackgroundColor("#4b8f4b");
 
-    height: 600,
+        // Right-side shop panel
+        this.add.rectangle(
+            1140,
+            360,
+            280,
+            720,
+            0x222222
+        );
 
-    scene: {
+        // Title
+        this.add.text(
+            1020,
+            20,
+            "SOLARION\nDEFENSE",
+            {
+                fontSize: "28px",
+                color: "#ffffff",
+                align: "center"
+            }
+        );
 
-        create() {
+        // Stats
+        this.add.text(
+            1010,
+            120,
+            "💰 $650",
+            {
+                fontSize: "20px",
+                color: "#ffffff"
+            }
+        );
 
-            this.add.text(
-                200,
-                250,
-                "SOLARION DEFENSE",
-                {
-                    fontSize: "40px",
-                    color: "#ffffff"
-                }
-            );
+        this.add.text(
+            1010,
+            155,
+            "❤️ 100",
+            {
+                fontSize: "20px",
+                color: "#ffffff"
+            }
+        );
 
-        }
+        this.add.text(
+            1010,
+            190,
+            "🌊 Round 1",
+            {
+                fontSize: "20px",
+                color: "#ffffff"
+            }
+        );
 
-    }
+        // Start Round button
+        const startBtn =
+            this.add.rectangle(
+                1080,
+                270,
+                180,
+                50,
+                0x4caf50
+            )
+            .setInteractive();
 
-};
-
-new Phaser.Game(config);
-
-</script>
-
-</body>
-</html>
+        this.add.text(
+            1015,
+            255,
+            "▶ Start
