@@ -1,161 +1,91 @@
-<!DOCTYPE html> 
-<html> 
-<head> 
-    <meta charset="UTF-8"> 
-    <title>Solarion Defense</title> 
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script> 
-    <style> 
-        body { margin: 0; overflow: hidden; background: #000; } 
-    </style> 
-</head> 
-<body> 
-<script> 
-class MainScene extends Phaser.Scene { 
-    constructor(){ 
-        super("MainScene"); 
-        this.lives = 100; 
-        this.money = 650; 
-        this.wave = 1; 
-        this.enemies = []; 
-        this.towers = [];
-        this.selectedTowerType = null;
-    } 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Solarion Defense</title>
 
-    create(){ 
-        this.cameras.main.setBackgroundColor("#4b8f4b"); 
-        
-        this.pathPoints = [ 
-            {x:0,y:350}, 
-            {x:250,y:350}, 
-            {x:250,y:120}, 
-            {x:800,y:120}, 
-            {x:800,y:580}, 
-            {x:1000,y:580} 
-        ]; 
+<script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
 
-        this.drawTrack(); 
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+}
+</style>
 
-        // Sidebar 
-        this.add.rectangle( 1140, 360, 280, 720, 0x222222 ); 
-        
-        // Title 
-        this.add.text( 1020, 20, "SOLARION DEFENSE", { fontSize:"24px", color:"#ffffff" } ); 
-        
-        // Stats 
-        this.moneyText = this.add.text( 1020, 100, "💰 $" + this.money, { fontSize:"20px", color:"#ffffff" } ); 
-        this.livesText = this.add.text( 1020, 140, "❤️ " + this.lives, { fontSize:"20px", color:"#ffffff" } ); 
-        this.waveText = this.add.text( 1020, 180, "🌊 Wave " + this.wave, { fontSize:"20px", color:"#ffffff" } ); 
-        
-        // Start button 
-        this.startButton = this.add.rectangle( 1080, 260, 180, 50, 0x4caf50 ) 
-            .setInteractive(); 
-        this.add.text( 1015, 245, "▶ Start Round", { fontSize:"22px", color:"#ffffff" } ); 
-        this.startButton.on( "pointerdown", ()=>{ 
-            this.startRound(); 
-        }); 
-        
-        // Shop Label 
-        this.add.text( 1060, 330, "SHOP ($100)", { fontSize:"18px", color:"#ffd700" });
+</head>
+<body>
 
-        // Shop Tower Button
-        const towerBtn = this.add.rectangle( 1080, 380, 140, 40, 0x3b82f6 ).setInteractive();
-        this.add.text( 1030, 370, "Build Tower", { fontSize:"16px", color:"#ffffff" });
-        towerBtn.on("pointerdown", () => {
-            if (this.money >= 100) {
-                this.selectedTowerType = "basic";
-            }
-        });
+<script>
 
-        this.input.on("pointerdown", (pointer) => {
-            if (pointer.x < 1000 && this.selectedTowerType === "basic" && this.money >= 100) {
-                this.money -= 100;
-                this.moneyText.setText("💰 $" + this.money);
-                const tower = this.add.circle(pointer.x, pointer.y, 16, 0x3b82f6);
-                this.towers.push({ x: pointer.x, y: pointer.y, range: 120, damage: 10, lastShot: 0 });
-                this.selectedTowerType = null;
-            }
-        });
+class MainScene extends Phaser.Scene {
+
+    create() {
+
+        this.cameras.main.setBackgroundColor("#4b8f4b");
+
+        // sidebar
+        this.add.rectangle(
+            1140,
+            360,
+            280,
+            720,
+            0x222222
+        );
+
+        // path
+        const g = this.add.graphics();
+
+        g.lineStyle(
+            40,
+            0xd4af37,
+            1
+        );
+
+        g.beginPath();
+
+        g.moveTo(0,350);
+        g.lineTo(250,350);
+        g.lineTo(250,120);
+        g.lineTo(800,120);
+        g.lineTo(800,580);
+        g.lineTo(1000,580);
+
+        g.strokePath();
+
+        // enemy test
+        this.enemy =
+            this.add.circle(
+                100,
+                100,
+                15,
+                0xff0000
+            );
+
     }
 
-    drawTrack() {
-        const graphics = this.add.graphics();
-        graphics.lineStyle(40, 0x8b5a2b, 1);
-        graphics.beginPath();
-        graphics.moveTo(this.pathPoints[0].x, this.pathPoints[0].y);
-        for (let i = 1; i < this.pathPoints.length; i++) {
-            graphics.lineTo(this.pathPoints[i].x, this.pathPoints[i].y);
-        }
-        graphics.strokePath();
-    }
+    update() {
 
-    startRound() {
-        let spawned = 0;
-        const timer = this.time.addEvent({
-            delay: 1000,
-            repeat: 5 + (this.wave * 2),
-            callback: () => {
-                const enemy = this.add.circle(this.pathPoints[0].x, this.pathPoints[0].y, 12, 0xff0000);
-                enemy.pathIndex = 0;
-                enemy.hp = 20 * this.wave;
-                this.enemies.push(enemy);
-            }
-        });
-        this.wave++;
-        this.waveText.setText("🌊 Wave " + this.wave);
-    }
+        this.enemy.x += 1;
 
-    update(time, delta) {
-        // Move enemies
-        for (let i = this.enemies.length - 1; i >= 0; i--) {
-            const enemy = this.enemies[i];
-            const target = this.pathPoints[enemy.pathIndex + 1];
-            if (!target) {
-                enemy.destroy();
-                this.enemies.splice(i, 1);
-                this.lives -= 10;
-                this.livesText.setText("❤️ " + Math.max(0, this.lives));
-                continue;
-            }
-            const dx = target.x - enemy.x;
-            const dy = target.y - enemy.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const speed = 2;
-            if (dist < speed) {
-                enemy.pathIndex++;
-            } else {
-                enemy.x += (dx / dist) * speed;
-                enemy.y += (dy / dist) * speed;
-            }
+        if(this.enemy.x > 900){
+            this.enemy.x = 100;
         }
 
-        // Tower shooting
-        this.towers.forEach(tower => {
-            this.enemies.forEach(enemy => {
-                const dist = Phaser.Math.Distance.Between(tower.x, tower.y, enemy.x, enemy.y);
-                if (dist <= tower.range && time - tower.lastShot > 500) {
-                    enemy.hp -= tower.damage;
-                    tower.lastShot = time;
-                    if (enemy.hp <= 0) {
-                        enemy.destroy();
-                        const idx = this.enemies.indexOf(enemy);
-                        if (idx > -1) this.enemies.splice(idx, 1);
-                        this.money += 20;
-                        this.moneyText.setText("💰 $" + this.money);
-                    }
-                }
-            });
-        });
     }
+
 }
 
-const config = { 
-    type: AUTO, 
-    width: 1280, 
-    height: 720, 
-    scene: MainScene 
-}; 
+const config = {
+    type: Phaser.AUTO,
+    width: 1280,
+    height: 720,
+    scene: MainScene
+};
 
-const game = new Phaser.Game(config); 
-</script> 
-</body> 
+new Phaser.Game(config);
+
+</script>
+
+</body>
 </html>
